@@ -28,6 +28,7 @@ const userSchema = new mongoose.Schema(
         values: ["user", "owner", "deliveryBoy"],
         message: "Role must be either 'user' or 'owner' or 'deliveryBoy'",
       },
+      default: "user"
     },
   },
   { timestamps: true },

@@ -21,7 +21,7 @@ function errorMiddleware(err, req, res, next) {
     errors: error?.errors || [],
     stack: process.env.NODE_ENV === "development" ? error.stack : null,
   };
-
+  console.log(error);
   return res.status(error.statusCode || 500).json(response);
 }
 
