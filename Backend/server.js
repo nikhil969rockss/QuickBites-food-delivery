@@ -6,10 +6,10 @@ const PORT = process.env.PORT || 3000;
 //connect to database
 
 connectDB().then(() => {
-    // server listening
-    app.listen(PORT, () => {
-        console.log(`Server is running on PORT:${PORT} at http://localhost:${PORT}`)
-    })
-
-})
-
+  // server listening
+  app.listen(PORT, () => {
+    console.log(
+      `Server is running on PORT:${PORT} at http://localhost:${PORT}`,
+    );
+  });
+});
