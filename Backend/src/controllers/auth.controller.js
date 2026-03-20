@@ -1,3 +1,4 @@
+import BlackListTokenModel from "../models/blacklistToken.js";
 import UserModel from "../models/user.model.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
@@ -81,6 +82,18 @@ const loginController = asyncHandler(async (req, res, next) => {
   return res.status(200).json(new ApiResponse(200, "Login successfull", user));
 });
 
+/**
+ * @description controller to handle logout user
+ * @param {Function} - handler function
+ */
+const logoutController = asyncHandler(async (req, res, next) => {
+  //add token to the blackList
+  const token = req.cookies.token;
+  if (token) {
+    await BlackListTokenModel.create({ token });
+  }
+  res.clearCookie("token");
+  return res.status(200).json(new ApiResponse(200, "Logout successfull"));
+});
 
-
-export { signUpController, loginController };
+export { signUpController, loginController, logoutController };
