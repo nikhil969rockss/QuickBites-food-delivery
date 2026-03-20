@@ -19,8 +19,7 @@ app.use(cookieParser());
 
 //routes
 
-app.use("/api/auth", authRouter)
-
+app.use("/api/auth", authRouter);
 
 //error middleware
 app.use(errorMiddleware);
