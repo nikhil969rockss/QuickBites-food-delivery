@@ -1,11 +1,19 @@
 'use client'
 
-import React, { useState } from 'react'
-import InputElement from './InputElement'
+//library
+import { useState } from 'react'
 import { FaRegUser } from 'react-icons/fa'
 import { SlEnvolope } from 'react-icons/sl'
 import { MdOutlineLocalPhone } from 'react-icons/md'
-import { FaGoogle } from 'react-icons/fa'
+import { CiLock } from 'react-icons/ci'
+import { BsArrowRight } from 'react-icons/bs'
+import Link from 'next/link'
+
+//components
+import DivideLine from '../DivideLine'
+import Button from '../Button'
+import InputElement from '../InputElement'
+import GoogleButton from '../GoogleButton'
 
 const CreateAccount = () => {
   const [inputField, setInputField] = useState({
@@ -29,6 +37,7 @@ const CreateAccount = () => {
         <p>Start your delicious journey today.</p>
       </div>
       <form action="" className="mt-8 flex flex-col gap-4">
+        {/* Full name */}
         <InputElement
           label="Full Name"
           id="fullName"
@@ -39,6 +48,7 @@ const CreateAccount = () => {
           value={inputField.fullName}
           onChange={handleChange}
         />
+        {/* Email */}
         <InputElement
           label="Email"
           id="Email"
@@ -50,6 +60,7 @@ const CreateAccount = () => {
           value={inputField.email}
           onChange={handleChange}
         />
+        {/* Phone number */}
         <InputElement
           label="Phone Number"
           id="phone"
@@ -60,10 +71,11 @@ const CreateAccount = () => {
           onChange={handlePhone}
           required
         />
+        {/* Password */}
         <InputElement
           label="Password"
           id="phone"
-          icon={<MdOutlineLocalPhone color="#E09C96" />}
+          icon={<CiLock color="#E09C96" />}
           placeholder="●●●●●●●●"
           type="password"
           name="password"
@@ -72,22 +84,23 @@ const CreateAccount = () => {
           passwordValue={inputField.password}
           required
         />
-        <button className="flex cursor-pointer items-center justify-center gap-2 rounded-full border bg-linear-to-r from-[#B13B09] via-[#C74C1B] to-[#EE6B3B] p-3 font-black text-white transition-[scale] duration-300 active:scale-95">
-          Create Account
-        </button>
+        {/* Create account button */}
+        <Button>
+          Create Account <BsArrowRight />{' '}
+        </Button>
       </form>
-      <div className="mt-4 flex items-center">
-        <div className="w-full border-t border-black/20"></div>
-        <p className="w-full text-center text-sm text-black/50">
-          Or continue with
-        </p>
-        <div className="w-full border-t border-black/20"></div>
-      </div>
 
-      <button className="mt-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border bg-[#4C8DF5] p-3 font-semibold text-white transition-[scale] duration-300 active:scale-95">
-        <FaGoogle />
-        Google
-      </button>
+      <DivideLine />
+
+      {/* Google sign in button */}
+      <GoogleButton />
+
+      <p className="mt-4 text-center text-sm text-black/70">
+        Already have an account?{' '}
+        <Link href={'/login'} className="cursor-pointer hover:underline">
+          Sign In
+        </Link>
+      </p>
     </div>
   )
 }
