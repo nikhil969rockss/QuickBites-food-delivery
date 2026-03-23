@@ -45,9 +45,9 @@ const InputElement = ({
           onBlur={() => setActive(false)}
           {...rest}
         />
-        {type === 'password' && eyeIcon}
+        {id === 'password' && eyeIcon}
       </div>
-      {type === 'password' && active && isValid && (
+      {id === 'password' && active && isValid && (
         <p className="flex items-center gap-2 rounded-lg bg-[#FFEBEB] px-4 py-2 text-xs opacity-80">
           <AiOutlineExclamationCircle />
           password should have at least 6 character

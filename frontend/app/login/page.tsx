@@ -53,7 +53,7 @@ const LoginPage = () => {
           </Button>
         </form>
         <DivideLine />
-        <GoogleButton />
+        <GoogleButton text="in" />
         <p className="mt-4 text-center text-sm text-black/70">
           New to QuickBite?{' '}
           <Link href={'/register'} className="cursor-pointer hover:underline">

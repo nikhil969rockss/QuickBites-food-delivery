@@ -1,12 +1,14 @@
 'use client'
 
 //library
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { FaRegUser } from 'react-icons/fa'
 import { SlEnvolope } from 'react-icons/sl'
 import { MdOutlineLocalPhone } from 'react-icons/md'
 import { CiLock } from 'react-icons/ci'
 import { BsArrowRight } from 'react-icons/bs'
+import { FaEye } from 'react-icons/fa'
+import { IoIosEyeOff } from 'react-icons/io'
 import Link from 'next/link'
 
 //components
@@ -14,20 +16,28 @@ import DivideLine from '../DivideLine'
 import Button from '../Button'
 import InputElement from '../InputElement'
 import GoogleButton from '../GoogleButton'
+import SelectRole from './SelectRole'
 
 const CreateAccount = () => {
-  const [inputField, setInputField] = useState({
-    fullName: '',
-    email: '',
-    password: '',
-  })
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputField({ ...inputField, [e.target.name]: e.target.value })
-  }
+  //states
+  const fullNameRef = useRef<HTMLInputElement | null>(null)
+  const emailRef = useRef<HTMLInputElement | null>(null)
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [phone, setPhone] = useState('')
+  const [role, setRole] = useState('user')
+
+  // Phone number validation
   const handlePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
     const onlyNumbers = e.target.value.replace(/[^0-9]/g, '')
     if (onlyNumbers.length <= 10) setPhone(onlyNumbers)
+  }
+
+  //handling form submission
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    console.log(fullNameRef.current?.value)
+    console.log(emailRef.current?.value)
   }
   return (
     <div className="px-10 py-8">
@@ -36,7 +46,7 @@ const CreateAccount = () => {
         <h2 className="text-2xl font-black">Create Account</h2>
         <p>Start your delicious journey today.</p>
       </div>
-      <form action="" className="mt-8 flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
         {/* Full name */}
         <InputElement
           label="Full Name"
@@ -45,8 +55,7 @@ const CreateAccount = () => {
           placeholder="John Doe"
           required
           name="fullName"
-          value={inputField.fullName}
-          onChange={handleChange}
+          ref={fullNameRef}
         />
         {/* Email */}
         <InputElement
@@ -57,8 +66,7 @@ const CreateAccount = () => {
           type="email"
           name="email"
           required
-          value={inputField.email}
-          onChange={handleChange}
+          ref={emailRef}
         />
         {/* Phone number */}
         <InputElement
@@ -74,16 +82,35 @@ const CreateAccount = () => {
         {/* Password */}
         <InputElement
           label="Password"
-          id="phone"
+          id="password"
           icon={<CiLock color="#E09C96" />}
           placeholder="●●●●●●●●"
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           name="password"
-          value={inputField.password}
-          onChange={handleChange}
-          passwordValue={inputField.password}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          passwordValue={password}
           required
+          eyeIcon={
+            showPassword ? (
+              <IoIosEyeOff
+                onClick={() => setShowPassword(false)}
+                color="#E09C96"
+                className="cursor-pointer select-none"
+              />
+            ) : (
+              <FaEye
+                onClick={() => setShowPassword(true)}
+                color="#E09C96"
+                className="cursor-pointer select-none"
+              />
+            )
+          }
         />
+
+        {/* role */}
+        <SelectRole role={role} setRole={setRole} />
+
         {/* Create account button */}
         <Button>
           Create Account <BsArrowRight />{' '}
@@ -93,7 +120,7 @@ const CreateAccount = () => {
       <DivideLine />
 
       {/* Google sign in button */}
-      <GoogleButton />
+      <GoogleButton text="up" />
 
       <p className="mt-4 text-center text-sm text-black/70">
         Already have an account?{' '}
