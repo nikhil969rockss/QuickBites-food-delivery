@@ -63,13 +63,24 @@ const CreateAccount = () => {
     }
     if (data) {
       const response = await registerUser(data)
-      console.log(response)
+      if (!response?.success) {
+        setError(response?.message)
+        return
+      }
     }
   }
+  //use effect for error removing after delay
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        setError('')
+      }, 3000)
+    }
+  }, [error])
 
   return (
     <div className="px-10 py-8">
-      <ErrorNotification error={error} delay={3000} />
+      <ErrorNotification error={error} />
       <h1 className="text-xl font-bold text-[#C84D1C] md:hidden">QuickBites</h1>
       <div>
         <h2 className="text-2xl font-black">Create Account</h2>

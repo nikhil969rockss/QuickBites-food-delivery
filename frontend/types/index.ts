@@ -5,3 +5,7 @@ export type signupData = {
   mobile: string
   role: string
 }
+export type loginData = {
+  email: string
+  password: string
+}

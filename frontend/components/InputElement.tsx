@@ -8,6 +8,7 @@ type InputElementProps = {
   icon?: React.JSX.Element
   className?: string
   passwordValue?: string
+  componentType?: string
 } & React.ComponentProps<'input'>
 
 const InputElement = ({
@@ -18,6 +19,7 @@ const InputElement = ({
   icon,
   className,
   passwordValue,
+  componentType = 'register',
   ...rest
 }: InputElementProps) => {
   const [active, setActive] = useState(false)
@@ -47,12 +49,15 @@ const InputElement = ({
         />
         {id === 'password' && eyeIcon}
       </div>
-      {id === 'password' && active && isValid && (
-        <p className="flex items-center gap-2 rounded-lg bg-[#FFEBEB] px-4 py-2 text-xs opacity-80">
-          <AiOutlineExclamationCircle />
-          password should have at least 6 character
-        </p>
-      )}
+      {id === 'password' &&
+        active &&
+        isValid &&
+        componentType === 'register' && (
+          <p className="flex items-center gap-2 rounded-lg bg-[#FFEBEB] px-4 py-2 text-xs opacity-80">
+            <AiOutlineExclamationCircle />
+            password should have at least 6 character
+          </p>
+        )}
     </div>
   )
 }
