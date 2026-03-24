@@ -1,7 +1,7 @@
 'use client'
 
 //library
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FaRegUser } from 'react-icons/fa'
 import { SlEnvolope } from 'react-icons/sl'
 import { MdOutlineLocalPhone } from 'react-icons/md'
@@ -17,6 +17,8 @@ import Button from '../Button'
 import InputElement from '../InputElement'
 import GoogleButton from '../GoogleButton'
 import SelectRole from './SelectRole'
+import { signupValidation } from '@/app/register/validation'
+import { registerUser } from '@/app/register/api'
 
 const CreateAccount = () => {
   //states
@@ -25,6 +27,7 @@ const CreateAccount = () => {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [phone, setPhone] = useState('')
+  const [error, setError] = useState('')
   const [role, setRole] = useState('user')
 
   // Phone number validation
@@ -36,9 +39,42 @@ const CreateAccount = () => {
   //handling form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(fullNameRef.current?.value)
-    console.log(emailRef.current?.value)
+    if (
+      !fullNameRef.current?.value ||
+      !emailRef.current?.value ||
+      !password ||
+      !phone
+    ) {
+      setError('Please fill all the fields')
+      return
+    }
+    const formData = {
+      fullName: fullNameRef.current.value,
+      email: emailRef.current.value,
+      password,
+      mobile: phone,
+      role,
+    }
+    const { success, error, data } = signupValidation(formData)
+    if (!success) {
+      setError(error!)
+      return
+    }
+    if (data) {
+      const response = await registerUser(data)
+      console.log(response)
+    }
   }
+
+  //use effect for error removing
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        setError('')
+      }, 3000)
+    }
+  }, [error])
+
   return (
     <div className="px-10 py-8">
       <h1 className="text-xl font-bold text-[#C84D1C] md:hidden">QuickBites</h1>
@@ -127,6 +163,11 @@ const CreateAccount = () => {
         <Link href={'/login'} className="cursor-pointer hover:underline">
           Sign In
         </Link>
+      </p>
+      <p
+        className={`fixed top-0 ${error ? 'right-2' : '-right-100'} rounded-xl border bg-red-800 p-3 text-white transition-all duration-300`}
+      >
+        {error}
       </p>
     </div>
   )
