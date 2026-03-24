@@ -4,7 +4,7 @@ import Intro from '@/components/register-page/Intro'
 
 const RegisterPage = () => {
   return (
-    <main className="bg-background flex min-h-screen w-full flex-col items-center justify-center">
+    <main className="bg-background flex-center-col min-h-screen w-full">
       <section className="container mx-auto mt-10 grid grid-cols-2 overflow-hidden rounded-xl shadow-md">
         {/* ------left-section------ */}
         <Intro />

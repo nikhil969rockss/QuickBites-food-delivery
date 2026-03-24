@@ -11,6 +11,8 @@ import { CiLock } from 'react-icons/ci'
 import { SlEnvolope } from 'react-icons/sl'
 import { loginUser } from './api'
 import ErrorNotification from '@/components/ErrorNotification'
+import { IoIosEyeOff } from 'react-icons/io'
+import { FaEye } from 'react-icons/fa'
 
 const LoginPage = () => {
   //states
@@ -18,7 +20,8 @@ const LoginPage = () => {
     email: '',
     password: '',
   })
-  const [error, setError] = useState('')
+  const [error, setError] = useState<string>('')
+  const [showPassword, setShowPassword] = useState<boolean>(false)
 
   // handling input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,6 +87,22 @@ const LoginPage = () => {
               value={inputFields.password}
               onChange={handleChange}
               componentType="login"
+              type={showPassword ? 'text' : 'password'}
+              eyeIcon={
+                showPassword ? (
+                  <IoIosEyeOff
+                    onClick={() => setShowPassword(false)}
+                    color="#E09C96"
+                    className="cursor-pointer select-none"
+                  />
+                ) : (
+                  <FaEye
+                    onClick={() => setShowPassword(true)}
+                    color="#E09C96"
+                    className="cursor-pointer select-none"
+                  />
+                )
+              }
             />
             <Link
               href={'/forgot-password'}

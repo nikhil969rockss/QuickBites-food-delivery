@@ -81,7 +81,7 @@ const CreateAccount = () => {
   return (
     <div className="px-10 py-8">
       <ErrorNotification error={error} />
-      <h1 className="text-xl font-bold text-[#C84D1C] md:hidden">QuickBites</h1>
+      <h1 className="text-primary text-xl font-bold md:hidden">QuickBites</h1>
       <div>
         <h2 className="text-2xl font-black">Create Account</h2>
         <p>Start your delicious journey today.</p>
