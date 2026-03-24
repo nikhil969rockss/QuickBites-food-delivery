@@ -19,6 +19,7 @@ import GoogleButton from '../GoogleButton'
 import SelectRole from './SelectRole'
 import { signupValidation } from '@/app/register/validation'
 import { registerUser } from '@/app/register/api'
+import ErrorNotification from '../ErrorNotification'
 
 const CreateAccount = () => {
   //states
@@ -77,6 +78,7 @@ const CreateAccount = () => {
 
   return (
     <div className="px-10 py-8">
+      <ErrorNotification error={error} />
       <h1 className="text-xl font-bold text-[#C84D1C] md:hidden">QuickBites</h1>
       <div>
         <h2 className="text-2xl font-black">Create Account</h2>
@@ -163,11 +165,6 @@ const CreateAccount = () => {
         <Link href={'/login'} className="cursor-pointer hover:underline">
           Sign In
         </Link>
-      </p>
-      <p
-        className={`fixed top-0 ${error ? 'right-2' : '-right-100'} rounded-xl border bg-red-800 p-3 text-white transition-all duration-300`}
-      >
-        {error}
       </p>
     </div>
   )
