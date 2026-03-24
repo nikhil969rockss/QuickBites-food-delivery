@@ -13,6 +13,7 @@ import { loginUser } from './api'
 import ErrorNotification from '@/components/ErrorNotification'
 import { IoIosEyeOff } from 'react-icons/io'
 import { FaEye } from 'react-icons/fa'
+import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 
 const LoginPage = () => {
   //states
@@ -22,6 +23,7 @@ const LoginPage = () => {
   })
   const [error, setError] = useState<string>('')
   const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
 
   // handling input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,8 +33,11 @@ const LoginPage = () => {
   //handling login
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setLoading(true)
     if (!inputFields.email || !inputFields.password) {
       setError('Please fill all the fields')
+      setLoading(false)
+      return
     }
     const formData = {
       email: inputFields.email,
@@ -41,8 +46,10 @@ const LoginPage = () => {
     const response = await loginUser(formData)
     if (!response?.success) {
       setError(response?.message)
+      setLoading(false)
       return
     }
+    setLoading(false)
     console.log(response)
   }
 
@@ -111,7 +118,13 @@ const LoginPage = () => {
               forgot password
             </Link>
             <Button>
-              Sign In <BsArrowRight />{' '}
+              {loading ? (
+                <AiOutlineLoading3Quarters className="animate-spin" />
+              ) : (
+                <>
+                  Sign In <BsArrowRight />
+                </>
+              )}
             </Button>
           </form>
           <DivideLine />

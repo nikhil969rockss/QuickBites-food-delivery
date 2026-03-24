@@ -1,7 +1,7 @@
 import { signupData } from '@/types'
 import { api } from '@/utils/axios'
 
-export const registerUser = async (formData: signupData) => {
+export const registerUserApi = async (formData: signupData) => {
   try {
     const response = await api.post('/api/auth/signup', formData)
     return response.data

@@ -18,8 +18,9 @@ import InputElement from '../InputElement'
 import GoogleButton from '../GoogleButton'
 import SelectRole from './SelectRole'
 import { signupValidation } from '@/app/register/validation'
-import { registerUser } from '@/app/register/api'
+import { registerUserApi } from '@/app/register/api'
 import ErrorNotification from '../ErrorNotification'
+import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 
 const CreateAccount = () => {
   //states
@@ -30,6 +31,7 @@ const CreateAccount = () => {
   const [phone, setPhone] = useState('')
   const [error, setError] = useState('')
   const [role, setRole] = useState('user')
+  const [loading, setLoading] = useState<boolean>(false)
 
   // Phone number validation
   const handlePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,6 +42,7 @@ const CreateAccount = () => {
   //handling form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setLoading(true)
     if (
       !fullNameRef.current?.value ||
       !emailRef.current?.value ||
@@ -47,6 +50,7 @@ const CreateAccount = () => {
       !phone
     ) {
       setError('Please fill all the fields')
+      setLoading(false)
       return
     }
     const formData = {
@@ -59,14 +63,18 @@ const CreateAccount = () => {
     const { success, error, data } = signupValidation(formData)
     if (!success) {
       setError(error!)
+      setLoading(false)
       return
     }
     if (data) {
-      const response = await registerUser(data)
+      const response = await registerUserApi(data)
       if (!response?.success) {
         setError(response?.message)
+        setLoading(false)
         return
       }
+      console.log(response)
+      setLoading(false)
     }
   }
   //use effect for error removing after delay
@@ -153,7 +161,14 @@ const CreateAccount = () => {
 
         {/* Create account button */}
         <Button>
-          Create Account <BsArrowRight />{' '}
+          {loading ? (
+            <AiOutlineLoading3Quarters className="animate-spin" />
+          ) : (
+            <>
+              Create Account 
+              <BsArrowRight />
+            </>
+          )}
         </Button>
       </form>
 

@@ -10,6 +10,8 @@ import { IoIosEyeOff } from 'react-icons/io'
 import { FaEye } from 'react-icons/fa'
 import { verifyNewPassword } from './validataion'
 import ErrorNotification from '@/components/ErrorNotification'
+import { resetPasswordApi, sendOTPApi, verifyOTPApi } from './api'
+import { useRouter } from 'next/navigation'
 
 const ForgotPasswordPage = () => {
   //states
@@ -22,28 +24,37 @@ const ForgotPasswordPage = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
 
+  const router = useRouter()
+
   // handling sending OTP to the mail account
-  const handleSendOTP = (e: React.FormEvent<HTMLFormElement>) => {
-    setLoading(true)
+  const handleSendOTP = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setTimeout(() => {
-      setLoading(false)
-      setStep(2)
-    }, 3000)
+    setLoading(true)
+
+    const response = await sendOTPApi(email)
+    if (!response.success) {
+      setError(response.message)
+      return setLoading(false)
+    }
+    setStep(2)
+    setLoading(false)
   }
   // handling verifying OTP
-  const handleVerifyOTP = (e: React.FormEvent<HTMLFormElement>) => {
-    setLoading(true)
+  const handleVerifyOTP = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setTimeout(() => {
-      setLoading(false)
-      setStep(3)
-    }, 3000)
+    setLoading(true)
+    const response = await verifyOTPApi(email, OTP.join(''))
+    if (!response.success) {
+      setError(response.message)
+      return setLoading(false)
+    }
+    setStep(3)
+    setLoading(false)
   }
   //handling new password form
-  const handleNewPassword = (e: React.FormEvent<HTMLFormElement>) => {
-    setLoading(true)
+  const handleNewPassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setLoading(true)
     const { sucess, message } = verifyNewPassword({
       password: newPassword,
       confirmPassword,
@@ -52,6 +63,12 @@ const ForgotPasswordPage = () => {
       setLoading(false)
       return setError(message)
     }
+    const response = await resetPasswordApi(email, newPassword)
+    if (!response.success) {
+      setError(response.message)
+      return setLoading(false)
+    }
+    router.push('/login')
   }
 
   //use effect for error removing after delay
