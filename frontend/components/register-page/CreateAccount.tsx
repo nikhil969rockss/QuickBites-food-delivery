@@ -10,6 +10,8 @@ import { BsArrowRight } from 'react-icons/bs'
 import { FaEye } from 'react-icons/fa'
 import { IoIosEyeOff } from 'react-icons/io'
 import Link from 'next/link'
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 
 //components
 import DivideLine from '../DivideLine'
@@ -20,7 +22,7 @@ import SelectRole from './SelectRole'
 import { signupValidation } from '@/app/register/validation'
 import { registerUserApi } from '@/app/register/api'
 import ErrorNotification from '../ErrorNotification'
-import { AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { auth } from '@/firebase/config'
 
 const CreateAccount = () => {
   //states
@@ -57,7 +59,7 @@ const CreateAccount = () => {
       fullName: fullNameRef.current.value,
       email: emailRef.current.value,
       password,
-      mobile: phone,
+      mobile: '+91' + phone,
       role,
     }
     const { success, error, data } = signupValidation(formData)
@@ -76,6 +78,14 @@ const CreateAccount = () => {
       console.log(response)
       setLoading(false)
     }
+  }
+
+  // handle google signin
+
+  const googleAuth = async () => {
+    const provider = new GoogleAuthProvider()
+    const result = await signInWithPopup(auth, provider)
+    console.log(result)
   }
   //use effect for error removing after delay
   useEffect(() => {
@@ -165,7 +175,7 @@ const CreateAccount = () => {
             <AiOutlineLoading3Quarters className="animate-spin" />
           ) : (
             <>
-              Create Account 
+              Create Account
               <BsArrowRight />
             </>
           )}
@@ -175,7 +185,7 @@ const CreateAccount = () => {
       <DivideLine />
 
       {/* Google sign in button */}
-      <GoogleButton text="up" />
+      <GoogleButton onClick={googleAuth} text="up" />
 
       <p className="mt-4 text-center text-sm text-black/70">
         Already have an account?{' '}
