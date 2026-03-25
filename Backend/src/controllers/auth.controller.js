@@ -1,11 +1,10 @@
-import BlackListTokenModel from "../models/blacklistToken.js";
 import UserModel from "../models/user.model.js";
+import { loginUser, logoutUser, signupUser } from "../services/auth.service.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import { sendMail } from "../utils/mail.js";
 import { generateOTP } from "../utils/otp.js";
-import { generateToken } from "../utils/token.js";
 import loginSchema from "../validationSchemas/login.validation.js";
 import signUpSchema from "../validationSchemas/signup.validation.js";
 import z from "zod";
@@ -21,31 +20,21 @@ const signUpController = asyncHandler(async (req, res, next) => {
     throw new ApiError(400, "validation error", null, z.prettifyError(error));
   }
 
-  // checking user already exist
-  const { email } = data;
-  const userAlreadyExist = await UserModel.findOne({ email });
-  if (userAlreadyExist) {
-    throw new ApiError(400, "User already exist with this email");
-  }
+  const user = await signupUser(data);
 
-  // create user
-  const newUser = await UserModel.create({
-    ...data,
-  });
-  newUser.password = undefined;
-
-  // create token
-  const token = generateToken({ user: newUser });
-  res.cookie("token", token, {
+  res.cookie("token", user.token, {
     httpOnly: true,
     secure: !process.env.NODE_ENV === "development",
     maxAge: 1000 * 60 * 60 * 24 * 7,
   });
-
   //response
-  return res
-    .status(201)
-    .json(new ApiResponse(201, "User created successfully", newUser));
+  return res.status(201).json(
+    new ApiResponse(201, "User created successfully", {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    }),
+  );
 });
 
 /**
@@ -59,29 +48,21 @@ const loginController = asyncHandler(async (req, res, next) => {
   if (!success) {
     throw new ApiError(400, "validaton error", null, z.prettifyError(error));
   }
-  // check if user is already exist or not
-  const { email, password } = data;
-  const user = await UserModel.findOne({ email });
-  if (!user) {
-    throw new ApiError(400, "Invalid credentails");
-  }
-  //compare password
-  const isPasswordValid = await user.comparePassword(password);
-  if (!isPasswordValid) {
-    throw new ApiError(400, "Invalid credentails");
-  }
+  const user = await loginUser(data);
 
-  user.password = undefined;
-
-  //create token
-  const token = generateToken({ user });
-  res.cookie("token", token, {
+  res.cookie("token", user.token, {
     httpOnly: true,
     secure: !process.env.NODE_ENV === "development",
     maxAge: 1000 * 60 * 60 * 24 * 7,
   });
 
-  return res.status(200).json(new ApiResponse(200, "Login successfull", user));
+  return res.status(200).json(
+    new ApiResponse(200, "Login successfull", {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    }),
+  );
 });
 
 /**
@@ -89,14 +70,12 @@ const loginController = asyncHandler(async (req, res, next) => {
  * @param {Function} - handler function
  */
 const logoutController = asyncHandler(async (req, res, next) => {
-  //add token to the blackList
   const token = req.cookies.token;
-  if (token) {
-    await BlackListTokenModel.create({ token });
-  }
+  await logoutUser(token);
   res.clearCookie("token");
   return res.status(200).json(new ApiResponse(200, "Logout successfull"));
 });
+
 /**
  * @description controller to handle send OTP to user
  * @param {Function} - handler function

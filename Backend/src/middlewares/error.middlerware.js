@@ -1,3 +1,4 @@
+import logger from "../config/logger.js";
 import ApiError from "../utils/ApiError.js";
 
 /**
@@ -12,7 +13,7 @@ function errorMiddleware(err, req, res, next) {
   let error = err;
 
   if (!(error instanceof ApiError)) {
-    console.log(error);
+    logger.error(error);
   }
   const response = {
     success: error.success,
@@ -21,7 +22,7 @@ function errorMiddleware(err, req, res, next) {
     errors: error?.errors || [],
     stack: process.env.NODE_ENV === "development" ? error.stack : null,
   };
-  console.log(error);
+  logger.error(error);
   return res.status(error.statusCode || 500).json(response);
 }
 

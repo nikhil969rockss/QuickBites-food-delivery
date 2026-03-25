@@ -3,7 +3,9 @@ import {
   loginController,
   logoutController,
   sendOTPController,
-  signUpController,resetPasswordController,verifyOTPController
+  signUpController,
+  resetPasswordController,
+  verifyOTPController,
 } from "../controllers/auth.controller.js";
 
 const authRouter = express.Router();
