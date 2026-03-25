@@ -8,7 +8,10 @@ export const signupValidation = (formData: signupData) => {
       .max(25, 'Full name must be at most 25 characters'),
     email: z.email('please enter a valid email address'),
     password: z.string().min(6, 'Password must be at least 6 characters'),
-    mobile: z.string().min(10, 'Phone number must be at least 10 characters'),
+    mobile: z
+      .string()
+      .min(10, 'Phone number must be at least 10 characters')
+      .default('unavailable'),
     role: z.enum(['user', 'owner', 'deliveryBoy'], 'Invalid role types'),
   })
 

@@ -14,7 +14,8 @@ const signUpSchema = z.object({
   mobile: z
     .string()
     .min(10, "Mobile number should be atleast 10 characters long")
-    .max(18, "Mobile number should be less than 18 characters long"),
+    .max(18, "Mobile number should be less than 18 characters long")
+    .default("unavailable"),
   role: z.enum(["user", "owner", "deliveryBoy"]).default("user"),
 });
 

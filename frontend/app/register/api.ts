@@ -10,3 +10,16 @@ export const registerUserApi = async (formData: signupData) => {
     return error.response.data
   }
 }
+
+export const googleAuthApi = async (data: {
+  fullName: string
+  email: string
+}) => {
+  try {
+    const response = await api.post('/api/auth/google', data)
+    return response.data
+  } catch (error: any) {
+    console.log(error.response)
+    return error.response.data
+  }
+}

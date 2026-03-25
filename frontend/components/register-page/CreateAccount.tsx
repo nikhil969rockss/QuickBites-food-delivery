@@ -20,9 +20,10 @@ import InputElement from '../InputElement'
 import GoogleButton from '../GoogleButton'
 import SelectRole from './SelectRole'
 import { signupValidation } from '@/app/register/validation'
-import { registerUserApi } from '@/app/register/api'
+import { registerUserApi, googleAuthApi } from '@/app/register/api'
 import ErrorNotification from '../ErrorNotification'
 import { auth } from '@/firebase/config'
+import { useRouter } from 'next/navigation'
 
 const CreateAccount = () => {
   //states
@@ -35,10 +36,15 @@ const CreateAccount = () => {
   const [role, setRole] = useState('user')
   const [loading, setLoading] = useState<boolean>(false)
 
+  const router = useRouter()
+
   // Phone number validation
-  const handlePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const onlyNumbers = e.target.value.replace(/[^0-9]/g, '')
-    if (onlyNumbers.length <= 10) setPhone(onlyNumbers)
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+
+    if (isNaN(Number(value))) return
+    if (phone.length > 10) return
+    setPhone(value)
   }
 
   //handling form submission
@@ -86,6 +92,20 @@ const CreateAccount = () => {
     const provider = new GoogleAuthProvider()
     const result = await signInWithPopup(auth, provider)
     console.log(result)
+    if (result) {
+      const data = {
+        fullName: result.user.displayName!,
+        email: result.user.email!,
+        mobile: 'unavailable',
+      }
+      const response = await googleAuthApi(data)
+      if (!response?.success) {
+        setError(response?.message)
+        return
+      }
+      console.log(response)
+      router.push('/google-auth/update')
+    }
   }
   //use effect for error removing after delay
   useEffect(() => {
@@ -131,10 +151,10 @@ const CreateAccount = () => {
           label="Phone Number"
           id="phone"
           icon={<MdOutlineLocalPhone color="#E09C96" />}
-          placeholder="+91 812345679"
-          type="tel"
+          placeholder="812345679"
           value={phone}
-          onChange={handlePhone}
+          onChange={handlePhoneChange}
+          componentType="phone"
           required
         />
         {/* Password */}

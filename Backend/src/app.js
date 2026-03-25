@@ -13,6 +13,7 @@ import errorMiddleware from "./middlewares/error.middlerware.js";
 
 //routes imports
 import authRouter from "./routes/auth.route.js";
+import gooleAuthRouter from "./routes/googleAuth.route.js";
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use(
 //routes
 
 app.use("/api/auth", authRouter);
+app.use("/api/auth/google", gooleAuthRouter);
 
 //error middleware
 app.use(errorMiddleware);
