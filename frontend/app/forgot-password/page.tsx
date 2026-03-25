@@ -1,6 +1,6 @@
 'use client'
 import Footer from '@/components/Footer'
-import EnterOTP from '@/components/forgot-page/EnterOTP'
+import NumberBoxes from '@/components/NumberBoxes'
 import InputElement from '@/components/InputElement'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -82,7 +82,7 @@ const ForgotPasswordPage = () => {
   return (
     <>
       <main className="flex-center-row min-h-[90vh] w-full">
-        <section className="w-full max-w-md rounded-xl border p-6 shadow-lg md:max-w-lg lg:max-w-xl">
+        <section className="boder-black/20 w-full max-w-md rounded-xl border p-6 shadow-lg md:max-w-lg lg:max-w-xl">
           <ErrorNotification error={error} />
           {/* Step - 1 email address for sending OTP */}
           {step === 1 && (
@@ -143,7 +143,12 @@ const ForgotPasswordPage = () => {
 
               {/* otp verify */}
               <form onSubmit={handleVerifyOTP} className="flex flex-col gap-4">
-                <EnterOTP OTP={OTP} setOTP={setOTP} length={6} />
+                <NumberBoxes
+                  label="Enter OTP"
+                  state={OTP}
+                  setState={setOTP}
+                  length={6}
+                />
                 <button
                   disabled={OTP[0] === ''}
                   className="btn-primary btn-disabled w-full disabled:bg-gray-400!"

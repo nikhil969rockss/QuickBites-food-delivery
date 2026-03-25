@@ -2,14 +2,18 @@
 
 import React, { useEffect, useRef } from 'react'
 
-const EnterOTP = ({
+const NumberBoxes = ({
   length = 4,
-  OTP,
-  setOTP,
+  state,
+  setState,
+  className,
+  label,
 }: {
   length?: number
-  OTP: string[]
-  setOTP: (OTP: string[]) => void
+  state: string[]
+  setState: (OTP: string[]) => void
+  label: string
+  className?: string
 }) => {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
 
@@ -23,9 +27,9 @@ const EnterOTP = ({
     // only accepts number
     if (isNaN(Number(value))) return
 
-    const newOtp = [...OTP]
+    const newOtp = [...state]
     newOtp[index] = value.substring(value.length - 1)
-    setOTP(newOtp)
+    setState(newOtp)
 
     if (value && index < length - 1) {
       inputRefs.current[index + 1]?.focus()
@@ -40,19 +44,19 @@ const EnterOTP = ({
     e: React.KeyboardEvent<HTMLInputElement>,
     index: number
   ) => {
-    if (e.key === 'Backspace' && !OTP[index] && index > 0) {
+    if (e.key === 'Backspace' && !state[index] && index > 0) {
       inputRefs.current[index - 1]?.focus()
     }
   }
   return (
     <div className="flex flex-col gap-4">
       <label htmlFor="otp " className="text-center font-black">
-        Enter OTP
+        {label}
       </label>
       <div className="flex-center-row gap-4">
-        {OTP.map((data, index) => (
+        {state.map((data, index) => (
           <input
-            className="size-10 rounded-xl border-2 border-transparent bg-white text-center font-bold focus:border-black focus:bg-gray-100 focus:outline-none md:size-14 lg:size-18"
+            className={`size-10 rounded-xl border-2 border-transparent bg-white text-center font-bold focus:border-black focus:bg-gray-100 focus:outline-none md:size-14 lg:size-18 ${className}`}
             key={index}
             type="text"
             maxLength={1}
@@ -70,4 +74,4 @@ const EnterOTP = ({
   )
 }
 
-export default EnterOTP
+export default NumberBoxes

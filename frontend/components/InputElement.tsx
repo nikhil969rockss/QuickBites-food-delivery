@@ -8,7 +8,7 @@ type InputElementProps = {
   icon?: React.JSX.Element
   className?: string
   passwordValue?: string
-  componentType?: string
+  componentType?: 'register' | 'login' | 'phone'
 } & React.ComponentProps<'input'>
 
 const InputElement = ({
@@ -38,6 +38,7 @@ const InputElement = ({
       <div
         className={`flex items-center gap-2 rounded-xl bg-[#FFEDEB] px-6 py-4 text-black ${active ? 'border-2 border-black' : 'border-2 border-transparent'} transition-[border] duration-300`}
       >
+        {componentType === 'phone' && <span>+91</span>}
         {icon}
         <input
           type={type}
