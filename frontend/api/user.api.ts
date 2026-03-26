@@ -10,10 +10,19 @@ export const getMe = async () => {
   }
 }
 
-export type TUpdateData = { email: string; mobile: string }
-export const updateMobile = async (data: TUpdateData) => {
+export const updateUserMobile = async (mobile: string) => {
   try {
-    const response = await api.post('/api/user/update/mobile', data)
+    const response = await api.post('/api/user/update/mobile', mobile)
+    return response.data
+  } catch (error: any) {
+    console.log(error.response)
+    return error?.response?.data
+  }
+}
+
+export const updateUserRole = async (data: { role: string }) => {
+  try {
+    const response = await api.post('/api/user/update/role', data)
     return response.data
   } catch (error: any) {
     console.log(error.response)

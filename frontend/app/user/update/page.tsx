@@ -1,12 +1,12 @@
 'use client'
 
-import { getMe, TUpdateData, updateMobile } from '@/api/user.api'
+import { getMe, updateUserMobile, updateUserRole } from '@/api/user.api'
 import Button from '@/components/Button'
 import ErrorNotification from '@/components/ErrorNotification'
 import Footer from '@/components/Footer'
 import InputElement from '@/components/InputElement'
-import { TLoggedInUser } from '@/types'
 import { roleTypesButton } from '@/utils/constants'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 const PhoneAndRolePage = () => {
@@ -14,8 +14,10 @@ const PhoneAndRolePage = () => {
   const [mobileNumber, setMobileNumber] = useState<string>('')
   const [roleType, setRoleType] = useState<string>('')
   const [error, setError] = useState<string>('')
-  const [loggedInUser, setLoggedInUser] = useState<TLoggedInUser | undefined>()
+
   const [loading, setLoading] = useState<boolean>(false)
+
+  const router = useRouter()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -29,26 +31,25 @@ const PhoneAndRolePage = () => {
     if (mobileNumber.length < 10 || !mobileNumber) {
       return setError('Please enter a valid mobile number')
     }
-    if (loggedInUser) {
-      const data = {
-        email: loggedInUser.email,
-        mobile: mobileNumber,
-      }
-
-      const response = await updateMobile(data)
-      console.log(response)
-      if (!response?.success) {
-        return setError(response?.message)
-      }
-
-      setStep(2)
+    const response = await updateUserMobile(mobileNumber)
+    console.log(response)
+    if (!response?.success) {
+      return setError(response?.message)
     }
+
+    setStep(2)
   }
 
-  const handleRoleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRoleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if(!roleType)return setError('Please select a role type')
-    //TODO: Api call
+    if (!roleType) return setError('Please select a role type')
+    const data = { role: roleType }
+    const response = await updateUserRole(data)
+    console.log(response)
+    if (!response?.success) {
+      return setError(response?.message)
+    }
+    router.push('/')
   }
 
   // checking if user has already regestered with mobile number if yes then showing up the select role type component
@@ -62,7 +63,6 @@ const PhoneAndRolePage = () => {
       if (response?.data?.mobile && response?.data?.mobile !== 'unavailable') {
         setStep(2)
       }
-      setLoggedInUser(response?.data)
     }
     checkUser()
   }, [])
