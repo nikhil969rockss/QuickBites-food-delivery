@@ -191,7 +191,7 @@ const CreateAccount = () => {
         <SelectRole role={role} setRole={setRole} />
 
         {/* Create account button */}
-        <Button>
+        <Button disabled={loading}>
           {loading ? (
             <AiOutlineLoading3Quarters className="animate-spin" />
           ) : (
@@ -206,7 +206,7 @@ const CreateAccount = () => {
       <DivideLine />
 
       {/* Google sign in button */}
-      <GoogleButton onClick={googleAuth} text="up" />
+      <GoogleButton disabled={loading} onClick={googleAuth} text="up" />
 
       <p className="mt-4 text-center text-sm text-black/70">
         Already have an account?{' '}

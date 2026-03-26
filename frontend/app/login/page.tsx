@@ -134,7 +134,7 @@ const LoginPage = () => {
             >
               forgot password
             </Link>
-            <Button>
+            <Button disabled={loading}>
               {loading ? (
                 <AiOutlineLoading3Quarters className="animate-spin" />
               ) : (
@@ -145,7 +145,7 @@ const LoginPage = () => {
             </Button>
           </form>
           <DivideLine />
-          <GoogleButton onClick={googleAuth} text="in" />
+          <GoogleButton disabled={loading} onClick={googleAuth} text="in" />
           <p className="mt-4 text-center text-sm text-black/70">
             New to QuickBite?{' '}
             <Link href={'/register'} className="cursor-pointer hover:underline">

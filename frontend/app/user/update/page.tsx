@@ -113,7 +113,10 @@ const PhoneAndRolePage = () => {
                 inputMode="numeric"
                 title="Enter phone number"
               />
-              <Button className="btn-primary disabled:bg-gray-400!">
+              <Button
+                disabled={loading}
+                className="btn-primary disabled:bg-gray-400!"
+              >
                 {loading ? (
                   <AiOutlineLoading3Quarters className="animate-spin" />
                 ) : (
@@ -144,7 +147,10 @@ const PhoneAndRolePage = () => {
                 </button>
               ))}
 
-              <Button className="btn-primary disabled:bg-gray-400!">
+              <Button
+                disabled={loading}
+                className="btn-primary disabled:bg-gray-400!"
+              >
                 {loading ? (
                   <AiOutlineLoading3Quarters className="animate-spin" />
                 ) : (
