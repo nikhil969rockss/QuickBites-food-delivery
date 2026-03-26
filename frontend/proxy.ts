@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { verifyToken } from './utils/token'
 
 export async function proxy(request: NextRequest) {
-  const protectedRoutes = ['/user/update']
+  const protectedRoutes = ['/user/update', '/']
   const urlPath = request.nextUrl.pathname
   const token = (await cookies()).get('token')?.value
 

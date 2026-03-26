@@ -1,6 +1,6 @@
 import { api } from '@/utils/axios'
 
-export const getMe = async () => {
+export const getMeApi = async () => {
   try {
     const response = await api.get('/api/user/me')
     return response.data
@@ -10,9 +10,9 @@ export const getMe = async () => {
   }
 }
 
-export const updateUserMobile = async (mobile: string) => {
+export const updateUserMobileApi = async (data: { mobile: string }) => {
   try {
-    const response = await api.post('/api/user/update/mobile', mobile)
+    const response = await api.post('/api/user/update/mobile', data)
     return response.data
   } catch (error: any) {
     console.log(error.response)
@@ -20,7 +20,7 @@ export const updateUserMobile = async (mobile: string) => {
   }
 }
 
-export const updateUserRole = async (data: { role: string }) => {
+export const updateUserRoleApi = async (data: { role: string }) => {
   try {
     const response = await api.post('/api/user/update/role', data)
     return response.data

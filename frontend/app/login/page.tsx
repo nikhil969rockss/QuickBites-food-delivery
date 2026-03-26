@@ -9,11 +9,14 @@ import { useEffect, useState } from 'react'
 import { BsArrowRight } from 'react-icons/bs'
 import { CiLock } from 'react-icons/ci'
 import { SlEnvolope } from 'react-icons/sl'
-import { loginUser } from '@/api/auth.api'
+import { googleAuthApi, loginUser } from '@/api/auth.api'
 import ErrorNotification from '@/components/ErrorNotification'
 import { IoIosEyeOff } from 'react-icons/io'
 import { FaEye } from 'react-icons/fa'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { auth } from '@/firebase/config'
+import { useRouter } from 'next/navigation'
 
 const LoginPage = () => {
   //states
@@ -24,6 +27,8 @@ const LoginPage = () => {
   const [error, setError] = useState<string>('')
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
+
+  const router = useRouter()
 
   // handling input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,6 +56,27 @@ const LoginPage = () => {
     }
     setLoading(false)
     console.log(response)
+  }
+
+  //handle sign in with google
+  const googleAuth = async () => {
+    const provider = new GoogleAuthProvider()
+    const result = await signInWithPopup(auth, provider)
+    console.log(result)
+    if (result) {
+      const data = {
+        fullName: result.user.displayName!,
+        email: result.user.email!,
+        mobile: 'unavailable',
+      }
+      const response = await googleAuthApi(data)
+      if (!response?.success) {
+        setError(response?.message)
+        return
+      }
+      console.log(response)
+      router.push('/user/update')
+    }
   }
 
   return (
@@ -119,7 +145,7 @@ const LoginPage = () => {
             </Button>
           </form>
           <DivideLine />
-          <GoogleButton text="in" />
+          <GoogleButton onClick={googleAuth} text="in" />
           <p className="mt-4 text-center text-sm text-black/70">
             New to QuickBite?{' '}
             <Link href={'/register'} className="cursor-pointer hover:underline">

@@ -1,6 +1,6 @@
 'use client'
 
-import { getMe, updateUserMobile, updateUserRole } from '@/api/user.api'
+import { getMeApi, updateUserMobileApi, updateUserRoleApi } from '@/api/user.api'
 import Button from '@/components/Button'
 import ErrorNotification from '@/components/ErrorNotification'
 import Footer from '@/components/Footer'
@@ -8,6 +8,8 @@ import InputElement from '@/components/InputElement'
 import { roleTypesButton } from '@/utils/constants'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { FaArrowCircleRight } from 'react-icons/fa'
 
 const PhoneAndRolePage = () => {
   const [step, setStep] = useState<number>(1)
@@ -28,37 +30,47 @@ const PhoneAndRolePage = () => {
 
   const handleMobileUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setLoading(true)
     if (mobileNumber.length < 10 || !mobileNumber) {
+      setLoading(false)
       return setError('Please enter a valid mobile number')
     }
-    const response = await updateUserMobile(mobileNumber)
+    const response = await updateUserMobileApi({ mobile: mobileNumber })
     console.log(response)
     if (!response?.success) {
+      setLoading(false)
       return setError(response?.message)
     }
 
     setStep(2)
+    setLoading(false)
   }
 
   const handleRoleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!roleType) return setError('Please select a role type')
+    if (!roleType) {
+      setLoading(false)
+      return setError('Please select a role type')
+    }
     const data = { role: roleType }
-    const response = await updateUserRole(data)
+    const response = await updateUserRoleApi(data)
     console.log(response)
     if (!response?.success) {
+      setLoading(false)
       return setError(response?.message)
     }
+    setLoading(false)
     router.push('/')
   }
 
   // checking if user has already regestered with mobile number if yes then showing up the select role type component
   useEffect(() => {
     async function checkUser() {
-      const response = await getMe()
+      const response = await getMeApi()
 
       if (!response?.success) {
-        return setError(response?.message || 'Something went wrong')
+        setError(response?.message || 'Something went wrong')
+        router.push('/login')
       }
       if (response?.data?.mobile && response?.data?.mobile !== 'unavailable') {
         setStep(2)
@@ -102,7 +114,13 @@ const PhoneAndRolePage = () => {
                 title="Enter phone number"
               />
               <Button className="btn-primary disabled:bg-gray-400!">
-                Continue
+                {loading ? (
+                  <AiOutlineLoading3Quarters className="animate-spin" />
+                ) : (
+                  <>
+                    Continue <FaArrowCircleRight />
+                  </>
+                )}
               </Button>
             </form>
           )}
@@ -126,8 +144,14 @@ const PhoneAndRolePage = () => {
                 </button>
               ))}
 
-              <Button className="btn-primary mt-4 disabled:bg-gray-400!">
-                Continue
+              <Button className="btn-primary disabled:bg-gray-400!">
+                {loading ? (
+                  <AiOutlineLoading3Quarters className="animate-spin" />
+                ) : (
+                  <>
+                    Continue <FaArrowCircleRight />
+                  </>
+                )}
               </Button>
             </form>
           )}
