@@ -10,6 +10,7 @@ import { validateUpdateMobile } from "../validationSchemas/update.validation.js"
  * @param {Function} - request handler function
  */
 export const updateMobileController = asyncHandler(async (req, res, next) => {
+  console.log(req.body)
   const { success, data, error } = validateUpdateMobile(req.body);
   if (!success)
     throw new ApiError(400, "validation error", null, z.prettifyError(error));

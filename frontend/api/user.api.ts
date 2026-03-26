@@ -9,9 +9,11 @@ export const getMe = async () => {
     return error?.response?.data
   }
 }
-export const updateMobile = async () => {
+
+export type TUpdateData = { email: string; mobile: string }
+export const updateMobile = async (data: TUpdateData) => {
   try {
-    const response = await api.get('/api/user/me')
+    const response = await api.post('/api/user/update/mobile', data)
     return response.data
   } catch (error: any) {
     console.log(error.response)

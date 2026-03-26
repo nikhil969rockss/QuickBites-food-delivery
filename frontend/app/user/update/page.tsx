@@ -1,10 +1,11 @@
 'use client'
 
-import { getMe } from '@/api/user.api'
+import { getMe, TUpdateData, updateMobile } from '@/api/user.api'
 import Button from '@/components/Button'
 import ErrorNotification from '@/components/ErrorNotification'
 import Footer from '@/components/Footer'
 import InputElement from '@/components/InputElement'
+import { TLoggedInUser } from '@/types'
 import { roleTypesButton } from '@/utils/constants'
 import { useEffect, useState } from 'react'
 
@@ -13,6 +14,7 @@ const PhoneAndRolePage = () => {
   const [mobileNumber, setMobileNumber] = useState<string>('')
   const [roleType, setRoleType] = useState<string>('')
   const [error, setError] = useState<string>('')
+  const [loggedInUser, setLoggedInUser] = useState<TLoggedInUser | undefined>()
   const [loading, setLoading] = useState<boolean>(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,14 +24,30 @@ const PhoneAndRolePage = () => {
     setMobileNumber(value)
   }
 
-  const handleMobileUpdate = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleMobileUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    //api call
-    setStep(2)
+    if (mobileNumber.length < 10 || !mobileNumber) {
+      return setError('Please enter a valid mobile number')
+    }
+    if (loggedInUser) {
+      const data = {
+        email: loggedInUser.email,
+        mobile: mobileNumber,
+      }
+
+      const response = await updateMobile(data)
+      console.log(response)
+      if (!response?.success) {
+        return setError(response?.message)
+      }
+
+      setStep(2)
+    }
   }
 
   const handleRoleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if(!roleType)return setError('Please select a role type')
     //TODO: Api call
   }
 
@@ -37,12 +55,14 @@ const PhoneAndRolePage = () => {
   useEffect(() => {
     async function checkUser() {
       const response = await getMe()
+
       if (!response?.success) {
-        setError(response?.message || 'Something went wrong')
+        return setError(response?.message || 'Something went wrong')
       }
       if (response?.data?.mobile && response?.data?.mobile !== 'unavailable') {
         setStep(2)
       }
+      setLoggedInUser(response?.data)
     }
     checkUser()
   }, [])
