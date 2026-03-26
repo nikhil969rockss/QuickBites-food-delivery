@@ -1,4 +1,5 @@
 'use client'
+import { roleTypesButton } from '@/utils/constants'
 import { useState } from 'react'
 
 const SelectRole = ({
@@ -18,20 +19,16 @@ const SelectRole = ({
         Role
       </label>
       <div className="flex gap-4">
-        {['User', 'Owner', 'Delivery Boy'].map((r) => {
-          let value: string
-          if (r === 'User') value = 'user'
-          if (r === 'Owner') value = 'owner'
-          if (r === 'Delivery Boy') value = 'deliveryBoy'
+        {roleTypesButton.map((r) => {
           return (
-            <button
-              onClick={() => setRole(value)}
-              type="button"
-              key={r}
-              className={`flex-1 cursor-pointer rounded-xl border p-3 ${r.trim().toLowerCase().replace(' ', '') === role.toLowerCase() && `bg-linear-to-r from-[#B13B09] via-[#C74C1B] to-[#EE6B3B] p-3 font-black text-white`} transition-all duration-300`}
-            >
-              {r}
-            </button>
+            <input
+              onClick={() => setRole(r.value)}
+              name={r.value}
+              value={r.button}
+              readOnly
+              key={r.id}
+              className={`min-w-12.5 flex-1 cursor-pointer rounded-xl border p-3 text-center outline-none ${r.value === role && `bg-linear-to-r from-[#B13B09] via-[#C74C1B] to-[#EE6B3B] p-3 font-black text-white`} transition-all duration-300`}
+            />
           )
         })}
       </div>

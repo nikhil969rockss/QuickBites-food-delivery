@@ -1,11 +1,12 @@
 'use client'
 
+import { getMe } from '@/api/user.api'
 import Button from '@/components/Button'
 import ErrorNotification from '@/components/ErrorNotification'
 import Footer from '@/components/Footer'
 import InputElement from '@/components/InputElement'
 import { roleTypesButton } from '@/utils/constants'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const PhoneAndRolePage = () => {
   const [step, setStep] = useState<number>(1)
@@ -21,16 +22,40 @@ const PhoneAndRolePage = () => {
     setMobileNumber(value)
   }
 
-  const handleSubmitFirst = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleMobileUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     //api call
     setStep(2)
   }
 
-  const handleSubmitFinal = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRoleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     //TODO: Api call
   }
+
+  // checking if user has already regestered with mobile number if yes then showing up the select role type component
+  useEffect(() => {
+    async function checkUser() {
+      const response = await getMe()
+      if (!response?.success) {
+        setError(response?.message || 'Something went wrong')
+      }
+      if (response?.data?.mobile && response?.data?.mobile !== 'unavailable') {
+        setStep(2)
+      }
+    }
+    checkUser()
+  }, [])
+
+  //use effect for error removing after delay
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        setError('')
+      }, 3000)
+    }
+  }, [error])
+
   return (
     <>
       <main className="flex-center-row min-h-[90vh] w-full">
@@ -42,7 +67,7 @@ const PhoneAndRolePage = () => {
           </div>
           {step === 1 && (
             <form
-              onSubmit={handleSubmitFirst}
+              onSubmit={handleMobileUpdate}
               className="mt-6 flex flex-col gap-4"
             >
               <InputElement
@@ -63,7 +88,7 @@ const PhoneAndRolePage = () => {
           )}
           {step === 2 && (
             <form
-              onSubmit={handleSubmitFinal}
+              onSubmit={handleRoleUpdate}
               className="mt-6 flex flex-col gap-4"
             >
               <label className="font-xl font-bold" htmlFor="role">

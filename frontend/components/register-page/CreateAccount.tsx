@@ -20,7 +20,7 @@ import InputElement from '../InputElement'
 import GoogleButton from '../GoogleButton'
 import SelectRole from './SelectRole'
 import { signupValidation } from '@/app/register/validation'
-import { registerUserApi, googleAuthApi } from '@/app/register/api'
+import { registerUserApi, googleAuthApi } from '@/api/auth.api'
 import ErrorNotification from '../ErrorNotification'
 import { auth } from '@/firebase/config'
 import { useRouter } from 'next/navigation'
@@ -104,7 +104,7 @@ const CreateAccount = () => {
         return
       }
       console.log(response)
-      router.push('/google-auth/update')
+      router.push('/user/update')
     }
   }
   //use effect for error removing after delay
@@ -155,6 +155,7 @@ const CreateAccount = () => {
           value={phone}
           onChange={handlePhoneChange}
           componentType="phone"
+          name="mobile"
           required
         />
         {/* Password */}

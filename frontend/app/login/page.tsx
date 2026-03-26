@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 import { BsArrowRight } from 'react-icons/bs'
 import { CiLock } from 'react-icons/ci'
 import { SlEnvolope } from 'react-icons/sl'
-import { loginUser } from './api'
+import { loginUser } from '@/api/auth.api'
 import ErrorNotification from '@/components/ErrorNotification'
 import { IoIosEyeOff } from 'react-icons/io'
 import { FaEye } from 'react-icons/fa'
@@ -52,15 +52,6 @@ const LoginPage = () => {
     setLoading(false)
     console.log(response)
   }
-
-  //use effect for error removing after delay
-  useEffect(() => {
-    if (error) {
-      setTimeout(() => {
-        setError('')
-      }, 3000)
-    }
-  }, [error])
 
   return (
     <>

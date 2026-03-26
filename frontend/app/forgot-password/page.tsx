@@ -10,7 +10,7 @@ import { IoIosEyeOff } from 'react-icons/io'
 import { FaEye } from 'react-icons/fa'
 import { verifyNewPassword } from './validataion'
 import ErrorNotification from '@/components/ErrorNotification'
-import { resetPasswordApi, sendOTPApi, verifyOTPApi } from './api'
+import { sendOTPApi, verifyOTPApi, resetPasswordApi } from '@/api/auth.api'
 import { useRouter } from 'next/navigation'
 
 const ForgotPasswordPage = () => {

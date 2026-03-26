@@ -4,6 +4,7 @@ import {
   logoutUser,
   resetPassword,
   sendOTP,
+  signInWithGoogle,
   signupUser,
   verifyOTP,
 } from "../services/auth.service.js";
@@ -127,6 +128,40 @@ const resetPasswordController = asyncHandler(async (req, res, next) => {
     .status(200)
     .json(new ApiResponse(200, "Password reset successfully"));
 });
+
+/**
+ * @description controller to handle sign in with google
+ * @param {Function} - handler function
+ */
+export const signInWithGoogleController = asyncHandler(
+  async (req, res, next) => {
+    //validating incoming request
+    const { success, data, error } = signUpSchema.safeParse(req.body);
+    if (!success) {
+      throw new ApiError(400, "validation error", null, z.prettifyError(error));
+    }
+    // signing in with google
+    const { token, user } = await signInWithGoogle(data);
+
+    //setting up cookie with token
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: !process.env.NODE_ENV === "development",
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    });
+
+    const response = {
+      id: user._id,
+      email: user.email,
+      mobile: user.mobile,
+      role: user.role,
+    };
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, "Sign in successfully", response));
+  },
+);
 
 export {
   signUpController,

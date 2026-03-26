@@ -1,27 +1,28 @@
 //library
-import express from "express";
 import dotenv from "dotenv";
+dotenv.config();
+
+import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import helmet from "helmet";
-import httpLogger from "./middlewares/logger.middleware.js";
-
-dotenv.config();
 
 //middlewares imports
 import errorMiddleware from "./middlewares/error.middlerware.js";
+import httpLogger from "./middlewares/logger.middleware.js";
 
 //routes imports
 import authRouter from "./routes/auth.route.js";
-import gooleAuthRouter from "./routes/googleAuth.route.js";
+import userRouter from "./routes/user.route.js";
 
 const app = express();
 
 // middleware
 app.use(helmet());
-app.use(httpLogger);
 app.use(express.json());
 app.use(cookieParser());
+app.use(httpLogger);
+
 app.use(
   cors({
     origin: ["http://localhost:3000", "https://localhost:5173"],
@@ -32,7 +33,7 @@ app.use(
 //routes
 
 app.use("/api/auth", authRouter);
-app.use("/api/auth/google", gooleAuthRouter);
+app.use("/api/user", userRouter);
 
 //error middleware
 app.use(errorMiddleware);
