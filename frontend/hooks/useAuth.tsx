@@ -3,7 +3,7 @@
 import { setUser } from '@/redux/slices/user.slice'
 import { useRouter } from 'next/navigation'
 import { Dispatch, SetStateAction, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 //apis
 import { getMeApi } from '@/api/user.api'
@@ -14,6 +14,10 @@ type Props = {
 const useAuth = ({ setError }: Props) => {
   const dispatch = useDispatch()
   const router = useRouter()
+  const user = useSelector((state: any) => state.user)
+
+  console.log(user)
+
   useEffect(() => {
     async function checkUser() {
       const response = await getMeApi()
@@ -26,7 +30,7 @@ const useAuth = ({ setError }: Props) => {
     }
     checkUser()
   }, [])
-  return
+  return user
 }
 
 export default useAuth

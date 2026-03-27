@@ -1,3 +1,5 @@
+import { JwtPayload } from 'jsonwebtoken'
+
 export type signupData = {
   fullName: string
   email: string
@@ -14,5 +16,11 @@ export type TLoggedInUser = {
   id: string
   email: string
   mobile: string
+  role: string
+}
+
+export interface Token extends JwtPayload {
+  id: string
+  email: string
   role: string
 }
