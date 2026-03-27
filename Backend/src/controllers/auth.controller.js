@@ -39,6 +39,7 @@ const signUpController = asyncHandler(async (req, res, next) => {
       id: user.id,
       email: user.email,
       role: user.role,
+      mobile:user.mobile
     }),
   );
 });
@@ -67,6 +68,8 @@ const loginController = asyncHandler(async (req, res, next) => {
       id: user.id,
       email: user.email,
       role: user.role,
+      role: user.role,
+      mobile: user.mobile,
     }),
   );
 });

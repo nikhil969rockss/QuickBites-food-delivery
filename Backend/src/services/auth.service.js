@@ -1,5 +1,5 @@
 import { createBlackLisToken } from "../dal/token.dal.js";
-import { createUser, getUserByEmail } from "../dal/user.dal.js";
+import { createUser, getUserByEmail, updateUser } from "../dal/user.dal.js";
 import ApiError from "../utils/ApiError.js";
 import { sendMail } from "../utils/mail.js";
 import { generateOTP } from "../utils/otp.js";
@@ -26,7 +26,13 @@ export const signupUser = async (data) => {
   const payload = { _id: user._id, email: user.email, role: user.role };
   const token = generateToken(payload);
 
-  return { id: user._id, email: user.email, token };
+  return {
+    id: user._id,
+    email: user.email,
+    role: user.role,
+    mobile: user.mobile,
+    token,
+  };
 };
 
 /**
@@ -53,7 +59,13 @@ export const loginUser = async (data) => {
   const payload = { _id: user._id, email: user.email, role: user.role };
   const token = generateToken(payload);
 
-  return { id: user._id, email: user.email, token };
+  return {
+    id: user._id,
+    email: user.email,
+    role: user.role,
+    mobile: user.mobile,
+    token,
+  };
 };
 
 /**
@@ -131,13 +143,19 @@ export const resetPassword = async (email, newPassword) => {
   if (!user) {
     throw new ApiError(404, "User not found, Invalid email");
   }
+  // checking otp verified
   if (!user.isOTPVerified) {
     throw new ApiError(400, "OTP not verified");
   }
-  user.password = newPassword;
-  await user.save();
+  // check if the new password is same as the old password
+  const isNewPasswordSame = await user.comparePassword(newPassword);
+  if (isNewPasswordSame) {
+    throw new ApiError(400, "New password cannot be same as old password");
+  }
 
-  return user;
+  const updatedUser = await updateUser(user._id, { password: newPassword });
+
+  return updatedUser;
 };
 
 /**
