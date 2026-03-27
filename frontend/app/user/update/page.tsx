@@ -1,6 +1,10 @@
 'use client'
 
-import { getMeApi, updateUserMobileApi, updateUserRoleApi } from '@/api/user.api'
+import {
+  getMeApi,
+  updateUserMobileApi,
+  updateUserRoleApi,
+} from '@/api/user.api'
 import Button from '@/components/Button'
 import ErrorNotification from '@/components/ErrorNotification'
 import Footer from '@/components/Footer'

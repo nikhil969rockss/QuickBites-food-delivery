@@ -38,8 +38,10 @@ const InputElement = ({
       <div
         className={`flex items-center gap-2 rounded-xl bg-[#FFEDEB] px-6 py-4 text-black ${active ? 'border-2 border-black' : 'border-2 border-transparent'} transition-[border] duration-300`}
       >
-        {componentType === 'phone' && <span>+91</span>}
         {icon}
+        {componentType === 'phone' && (
+          <span className="text-[#E09C96]">+91</span>
+        )}
         <input
           type={type}
           id={id}
