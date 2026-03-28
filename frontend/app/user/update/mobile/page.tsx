@@ -8,7 +8,9 @@ const UpdateMobilePage = () => {
         <section className="w-full max-w-md rounded-xl border border-black/20 p-6 shadow-lg md:max-w-lg lg:max-w-xl">
           <div className="flex flex-col gap-4">
             {/* Heading */}
-            <h1 className="text-primary font-black lg:text-2xl italic">QuickBites</h1>
+            <h1 className="text-primary font-black italic lg:text-2xl">
+              QuickBites
+            </h1>
           </div>
           <UpdateMobileForm />
         </section>
