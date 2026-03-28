@@ -40,6 +40,9 @@
 @utility btn-disabled {
   @apply disabled:scale-100 disabled:cursor-not-allowed disabled:transition-none;
 }
+#active-div:has(input.search-food:focus) {
+  border: 2px solid var(--primary);
+}
 body {
   background: var(--background);
   color: var(--foreground);

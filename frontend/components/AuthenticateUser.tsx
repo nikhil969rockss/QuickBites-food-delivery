@@ -24,7 +24,7 @@ const AuthenticateUser = ({ children }: { children: React.ReactNode }) => {
       router.push('/home/delivery-boy')
     }
   }, [user])
-  return <>{children}</>
+  return <main>{children}</main>
 }
 
 export default AuthenticateUser

@@ -16,8 +16,6 @@ const useAuth = ({ setError }: Props) => {
   const router = useRouter()
   const user = useSelector((state: any) => state.user)
 
-  console.log(user)
-
   useEffect(() => {
     async function checkUser() {
       const response = await getMeApi()
@@ -26,7 +24,7 @@ const useAuth = ({ setError }: Props) => {
         if (setError) setError(response?.message || 'Something went wrong')
         router.push('/login')
       }
-      dispatch(setUser(response?.data))
+      dispatch(setUser(response?.data?.user))
     }
     checkUser()
   }, [])

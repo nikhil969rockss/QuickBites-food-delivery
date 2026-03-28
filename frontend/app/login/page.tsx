@@ -13,7 +13,7 @@ const LoginPage = () => {
       <main className="relative flex min-h-[90vh] flex-col items-center justify-center">
         {/* <--------main form----> */}
         <section className="w-full max-w-150 rounded-xl p-6 shadow-md">
-          <h2 className="text-2xl font-black">QuickBite</h2>
+          <h2 className="text-2xl font-black italic">QuickBite</h2>
           <p>Welcome back to the kinetic kichen</p>
 
           <LoginForm />

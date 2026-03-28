@@ -11,7 +11,9 @@ const Intro = () => {
       <FruitBackground />
       {/* upper section---- */}
       <div>
-        <h1 className="font-black md:text-3xl lg:text-5xl">QuickBites</h1>
+        <h1 className="font-black italic md:text-3xl lg:text-5xl">
+          QuickBites
+        </h1>
         <div className="mt-8 flex flex-col gap-4">
           <h3 className="font-bold md:text-2xl lg:text-4xl">
             Satisfy your <br />

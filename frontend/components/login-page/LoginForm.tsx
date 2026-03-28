@@ -81,7 +81,7 @@ const LoginForm = () => {
         setError(response?.message)
         return
       }
-      console.log(response)
+
       router.push('/user/update')
     }
   }
