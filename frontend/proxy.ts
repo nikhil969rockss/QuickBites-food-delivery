@@ -12,17 +12,22 @@ export async function proxy(request: NextRequest) {
   ]
   const urlPath = request.nextUrl.pathname
   const token = (await cookies()).get('token')?.value
+  let decoded
+  if (token) {
+    decoded = verifyToken(token)
+  }
+  if ((urlPath === '/login' || urlPath === '/register') && decoded) {
+    return NextResponse.redirect(
+      new URL(`/home/${decoded?.role}`, request.nextUrl)
+    )
+  }
 
   if (protectedRoutes.includes(urlPath)) {
-    if (!token) {
-      return NextResponse.redirect(new URL('/login', request.nextUrl))
-    }
-    const decoded = verifyToken(token)
-
-    if (!decoded) {
+    if (!token || !decoded) {
       return NextResponse.redirect(new URL('/login', request.nextUrl))
     }
 
+    //checking for user roles and redirecting to the correct page
     if (decoded?.role === 'user' && urlPath !== '/home/user') {
       return NextResponse.redirect(new URL('/home/user', request.nextUrl))
     } else if (decoded?.role === 'owner' && urlPath !== '/home/owner') {
@@ -40,5 +45,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/home/:path*', '/user/:path*'],
+  matcher: ['/', '/home/:path*', '/user/:path*', '/login', '/register'],
 }
