@@ -69,7 +69,7 @@ const LoginForm = () => {
   const googleAuth = async () => {
     const provider = new GoogleAuthProvider()
     const result = await signInWithPopup(auth, provider)
-    console.log(result)
+
     if (result) {
       const data = {
         fullName: result.user.displayName!,

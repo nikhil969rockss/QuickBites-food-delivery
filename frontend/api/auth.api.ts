@@ -66,3 +66,13 @@ export const googleAuthApi = async (data: {
     return error?.response?.data
   }
 }
+
+export const logoutApi = async () => {
+  try {
+    const response = await api.post('/api/auth/logout')
+    return response.data
+  } catch (error: any) {
+    console.log(error.response)
+    return error?.response?.data
+  }
+}

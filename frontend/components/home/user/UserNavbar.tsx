@@ -8,8 +8,10 @@ import { CgProfile } from 'react-icons/cg'
 import { IoIosLogOut } from 'react-icons/io'
 
 import { useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import useGetCurrentCity from '@/hooks/useGetCurrentCity'
+import { logoutApi } from '@/api/auth.api'
+import { setCity, setUser } from '@/redux/slices/user.slice'
 
 const UserNavbar = () => {
   //states
@@ -19,8 +21,9 @@ const UserNavbar = () => {
 
   const { getUsersCurrentCity } = useGetCurrentCity()
 
+  const dispatch = useDispatch()
+
   const { user, city } = useSelector((state: any) => state.user)
-  console.log(city)
 
   // focus the cursor to the input field when search icon is clicked
   const handleInputFocus = () => inputRef?.current?.focus()
@@ -28,6 +31,15 @@ const UserNavbar = () => {
   // get user location if city is not available by clicking the location icon
   const handleGetUserLocation = () => {
     if (!city) getUsersCurrentCity()
+  }
+
+  const handleLogout = async () => {
+    const response = await logoutApi()
+    if (response?.success) {
+      dispatch(setUser(null))
+      dispatch(setCity(null))
+    }
+    window.location.href = '/login'
   }
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
@@ -153,7 +165,10 @@ const UserNavbar = () => {
               <FaCartShopping className="text-lg" />
               My Orders
             </p>
-            <p className="hover:bg-primary/20 flex cursor-pointer items-center gap-1 p-3 text-xs font-bold capitalize select-none">
+            <p
+              onClick={handleLogout}
+              className="hover:bg-primary/20 flex cursor-pointer items-center gap-1 p-3 text-xs font-bold capitalize select-none"
+            >
               <IoIosLogOut className="text-lg" />
               Logout
             </p>
