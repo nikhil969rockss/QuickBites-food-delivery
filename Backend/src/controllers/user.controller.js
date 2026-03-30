@@ -24,6 +24,7 @@ export const getMeController = asyncHandler(async (req, res, next) => {
     email: user.email,
     mobile: user.mobile,
     role: user.role,
+    fullName: user.fullName,
   };
   res
     .status(200)

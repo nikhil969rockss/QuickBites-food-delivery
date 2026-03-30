@@ -39,7 +39,7 @@ const signUpController = asyncHandler(async (req, res, next) => {
       id: user.id,
       email: user.email,
       role: user.role,
-      mobile:user.mobile
+      mobile: user.mobile,
     }),
   );
 });
