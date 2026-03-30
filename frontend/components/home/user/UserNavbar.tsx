@@ -9,6 +9,7 @@ import { IoIosLogOut } from 'react-icons/io'
 
 import { useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
+import useGetCurrentCity from '@/hooks/useGetCurrentCity'
 
 const UserNavbar = () => {
   //states
@@ -16,9 +17,18 @@ const UserNavbar = () => {
   const [open, setOpen] = useState<boolean>(false)
   const [showSearch, setShowSearch] = useState<boolean>(false)
 
-  const { user } = useSelector((state: any) => state.user)
+  const { getUsersCurrentCity } = useGetCurrentCity()
 
+  const { user, city } = useSelector((state: any) => state.user)
+  console.log(city)
+
+  // focus the cursor to the input field when search icon is clicked
   const handleInputFocus = () => inputRef?.current?.focus()
+
+  // get user location if city is not available by clicking the location icon
+  const handleGetUserLocation = () => {
+    if (!city) getUsersCurrentCity()
+  }
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -38,8 +48,13 @@ const UserNavbar = () => {
 
       <div className="hidden w-full max-w-100 items-center gap-4 md:flex">
         <div className="flex items-center gap-2 border-r border-black/30 text-[16px]">
-          <FaLocationDot className="text-primary cursor-pointer" />
-          <h2 className="w-fit max-w-[70%] truncate">lodhi colony</h2>
+          <FaLocationDot
+            onClick={handleGetUserLocation}
+            className="text-primary cursor-pointer"
+          />
+          <h2 className="w-fit max-w-[70%] truncate px-1">
+            {city ?? 'Location'}
+          </h2>
         </div>
 
         {/* search bar div */}
@@ -78,10 +93,15 @@ const UserNavbar = () => {
               }}
               className="fixed inset-0 z-100 bg-black/50 md:hidden"
             ></div>
-            <div className="bg-background fixed top-8 left-1/2 z-200 mx-auto mt-20 flex w-full max-w-100 -translate-1/2 items-center gap-4 rounded-xl p-2 text-[14px]">
+            <div className="bg-background shadow-background fixed top-8 left-1/2 z-200 mx-auto mt-20 flex w-full max-w-100 -translate-1/2 items-center gap-4 rounded-xl p-2 text-[14px] shadow-md">
               <div className="flex items-center gap-2 border-r border-black/30">
-                <FaLocationDot className="text-primary cursor-pointer" />
-                <h2 className="w-fit max-w-[70%] truncate">lodhi colony</h2>
+                <FaLocationDot
+                  onClick={handleGetUserLocation}
+                  className="text-primary cursor-pointer"
+                />
+                <h2 className="w-fit max-w-[70%] truncate px-1">
+                  {city ?? 'Location'}
+                </h2>
               </div>
 
               {/* search bar div */}

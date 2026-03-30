@@ -25,7 +25,6 @@ const useAuth = ({ setError }: Props) => {
         router.push('/login')
       }
       dispatch(setUser(data))
-      
     }
     checkUser()
   }, [])

@@ -7,7 +7,7 @@ const UserHomePage = () => {
   return (
     <AuthenticateUser>
       <section className="container mx-auto min-h-screen w-full">
-        <section className="mx-auto px-2 flex max-w-200 flex-col gap-4 py-2">
+        <section className="mx-auto flex max-w-200 flex-col gap-4 px-2 py-2">
           <UserNavbar />
           <PromotionBanner />
         </section>
